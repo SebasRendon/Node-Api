@@ -18,7 +18,7 @@ const asincronia = () => {
        form: { undefined: undefined } };
      
      request(options, function (error, response, body) {
-       if (error) throw new Error(error);
+       if (error) throw new Error(reject(error));
        const token = JSON.parse(body);
        resolve(token.access_token);
       
@@ -27,6 +27,8 @@ const asincronia = () => {
   return promise;
 };
 //========== Consiguiendo la respuesta correcta ==========//
-asincronia()
-.then( respuesta => console.log(respuesta))
-.catch( error => console.error(error));
+
+
+module.exports= {
+  asincronia
+}
