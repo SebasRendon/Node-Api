@@ -4,13 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/api.js"
-    
+    "start": "nodemon src/functions/peticiones.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/node": "^11.9.5",
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "morgan": "^1.9.1",
