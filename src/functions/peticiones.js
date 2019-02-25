@@ -1,8 +1,19 @@
 var request = require("request");
+var path = require('path');
+require('../config/config');
 
-const asincronia = () => {
+const getDocument =()=>{
+  let promiseDocument = new Promise( (resolve, reject) =>{
+    process.env.ARCHIVO = '20514584789-01-FC01-0060.csv';
+    resolve("ok");
+  });
+  return promiseDocument;
+}
+
+
+const getToken = () => {
   //declaracion de la promesa.
-  let promise = new Promise( (resolve, reject) => {
+  let promiseToken = new Promise( (resolve, reject) => {
     var options = {
       method: 'POST',
        url: 'https://ose-gw1.efact.pe:443/api-efact-ose/oauth/token',
@@ -24,11 +35,51 @@ const asincronia = () => {
       
      });
   });
-  return promise;
+  return promiseToken;
 };
-//========== Consiguiendo la respuesta correcta ==========//
 
+const uploadFile = (token)=>{
+  let promiseUpload = new Promise( (resolve, reject)=>{     
+    var fs = require("fs");
+
+var options = {
+  method: 'POST',
+  url: 'https://ose-gw1.efact.pe:443/api-efact-ose/v1/document',
+  headers: 
+   { 
+     'Authorization': `bearer ${token}`,
+     'content-type': 'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' },
+  formData: 
+   { file: 
+      { value: fs.createReadStream(`${path.resolve(__dirname, '../uploads')}/${process.env.ARCHIVO}`),
+        options: 
+         { filename: `${process.env.ARCHIVO}`,
+           contentType: null } 
+          } 
+        } 
+      };
+
+request(options, function (error, response, body) {
+  if (error) throw new Error(reject(error));
+resolve(body);  
+});
+
+});
+return promiseUpload;
+};
+
+const webServicePi = (data)=>{
+  let webSerice = new Promise ( (resolve, request)=>
+  {
+    const code = JSON.parse(data);
+    resolve(code.code);
+  });
+return webSerice;
+  }
 
 module.exports= {
-  asincronia
+  getToken,
+  uploadFile,
+  getDocument,
+  webServicePi
 }
