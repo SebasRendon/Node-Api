@@ -29,7 +29,7 @@ const getToken = () => {
        form: { undefined: undefined } };
      
      request(options, function (error, response, body) {
-       if (error) throw new Error(reject(error));
+       if (error || response.statusCode != 200) throw new Error(reject(error));
        const token = JSON.parse(body);
        resolve(token.access_token);
       
